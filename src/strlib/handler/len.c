@@ -2,10 +2,10 @@
 #include <stdbool.h>
 
 
-size_t str_length(str_ref s, bool return_terminator)
+size_t string_length(str string, bool return_terminator)
 {
     size_t i = 0;
-    while (s[i] != '\0')
+    while (string[i] != '\0')
         i++;
 
     if (return_terminator)

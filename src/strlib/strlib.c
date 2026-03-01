@@ -1,9 +1,9 @@
 #include "../../inc/strlib.h"
 #include "../../inc/memory.h"
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
-static size_t recalc_capacity(size_t capacity, size_t min_capacity)
+size_t recalc_capacity(size_t capacity, size_t min_capacity)
 {
     size_t new_capacity = capacity != 0 ? capacity : 1; // Garante que não aconteça 0 * 2
     while (new_capacity < min_capacity)
@@ -13,9 +13,9 @@ static size_t recalc_capacity(size_t capacity, size_t min_capacity)
     return new_capacity;
 }
 
-void string_from(String *self, str_ref s) 
+void string_from(String *self, str s) 
 {
-    size_t len = str_length(s, true);
+    size_t len = string_length(s, true);
 
     if (self->data)
     {
@@ -29,9 +29,15 @@ void string_from(String *self, str_ref s)
     }
 
     self->length = len - 1; // exclui o null terminator
-    memcpy(self->data, s, len);
+    memcpy(self->data, s, len); // memcpy escolhido por design
 
     register_string(self);
+}
+
+String str_into_string(str ref, size_t capacity) {
+    String string = new_string(capacity);
+    string.string_from(&string, ref);
+    return string;
 }
 
 String new_string(size_t with_capacity)
@@ -45,7 +51,6 @@ String new_string(size_t with_capacity)
     self.string_from = string_from;
     return self;
 }
-
 void drop_string(String *string)
 {
     if (string->data)
@@ -59,7 +64,7 @@ void drop_string(String *string)
     string->length = 0;
 }
 
-void drop_ref(str_ref *ref)
+void drop_ref(str *ref)
 {
     if (isPointerNull(*ref, false))
         return;
