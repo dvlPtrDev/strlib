@@ -1,7 +1,6 @@
 #include "../../inc/strlib.h"
 #include "../../inc/memory.h"
 #include <stdlib.h>
-#include <string.h>
 
 size_t recalc_capacity(size_t capacity, size_t min_capacity)
 {
@@ -29,15 +28,9 @@ void string_from(String *self, str s)
     }
 
     self->length = len - 1; // exclui o null terminator
-    memcpy(self->data, s, len); // memcpy escolhido por design
+    string_copy(self->data, s, len); // atribuição de memcpy    
 
     register_string(self);
-}
-
-String str_into_string(str ref, size_t capacity) {
-    String string = new_string(capacity);
-    string.string_from(&string, ref);
-    return string;
 }
 
 String new_string(size_t with_capacity)
