@@ -1,22 +1,20 @@
 #include "../../inc/display.h"
 #include "../../inc/memory.h"
 
-void isPointerNull(void *ptr) {
+#include <stdlib.h>
+
+bool isPointerNull(void *ptr, bool kill) {
     if (ptr == NULL) {
-        fatal_err("This pointer is null!", 0x1000);
+        if (kill) {
+            fatal_print("Ponteiro nulo!", 0x1000);
+        }
+        return true;
     }
+    return false;
 }
 
 void *allocate(void *buf, size_t alloc_bytes) {
-    void *ptr = realloc(buf, alloc_bytes);
-    isPointerNull(ptr);
-    return ptr;
-}
-
-void dropString(String *string) {
-    free(string->data);
-    string->data = NULL;
-    string->string_from = NULL;    
-    string->capacity = 0;
-    string->length = 0;
+    void *tmp = realloc(buf, alloc_bytes);
+    isPointerNull(tmp, true);
+    return tmp;
 }

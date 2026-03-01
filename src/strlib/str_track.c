@@ -1,0 +1,35 @@
+#include "../../inc/strlib.h"
+#include "../../inc/display.h"
+#include "../../inc/memory.h"
+
+#define MAX_STRINGS 1024 
+static String *all_strings[MAX_STRINGS];
+static __uint16_t counter = 0;
+
+void register_string(String *s) {
+    if (counter < MAX_STRINGS) {
+        all_strings[counter++] = s;
+    } else {
+        fatal_print("This program uses 1024 Strings, fix that code!", 0x1100);
+    }
+}
+void unregister_string(String *string, bool remove_string_too) {
+    for (__uint16_t i = 0; i < counter; i++) {
+        if (all_strings[i]->data == string->data) {
+            if (remove_string_too) drop_string(string);
+            drop_ref(&all_strings[i]->data);
+            for (__uint16_t j = i; j < counter - 1; j++) {
+                // Shifting na array (também sobreescreve a string liberada)
+                all_strings[j] = all_strings[j + 1];
+            }
+            counter--; // Shifting permite counter aqui
+            all_strings[counter] = NULL;
+            break;
+        }
+    }
+}
+void clean_str() {
+    while (counter > 0) {
+        unregister_string(all_strings[0], true);
+    }
+}

@@ -1,9 +1,11 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include <stdlib.h>
+#include "./strlib.h"
+#include <stdbool.h>
 
-void isPointerNull(void *ptr);
+bool isPointerNull(void *ptr, bool kill);
 void *allocate(void *buf, size_t alloc_bytes);
+
 
 #endif
