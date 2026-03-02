@@ -1,7 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include "../inc/strlib.h"
+#include "../include/strlib.h"
 
 /* ===========================================
  * Funções de exibição e logging

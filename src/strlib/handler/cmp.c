@@ -1,4 +1,4 @@
-#include "../../../inc/strlib.h"
+#include "../../../include/strlib.h"
 
 bool string_compare(str s1, str s2) {
     size_t len1 = string_length(s1, false); 

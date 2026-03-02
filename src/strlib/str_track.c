@@ -1,6 +1,6 @@
-#include "../../inc/strlib.h"
-#include "../../inc/display.h"
-#include "../../inc/memory.h"
+#include "../../include/strlib.h"
+#include "../../internal/display.h"
+#include "../../include/memory.h"
 
 #define MAX_STRINGS 1024 
 

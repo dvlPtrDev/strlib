@@ -1,5 +1,6 @@
-#include "../../inc/strlib.h"
-#include "../../inc/memory.h"
+#include "../../include/strlib.h"
+#include "../../include/memory.h"
+
 #include <stdlib.h>
 
 size_t recalc_capacity(size_t capacity, size_t min_capacity)
@@ -57,7 +58,7 @@ void drop_string(String *string)
     string->length = 0;
 }
 
-void drop_ref(str *ref)
+void drop_ref(mut_str *ref)
 {
     if (isPointerNull(*ref, false))
         return;
