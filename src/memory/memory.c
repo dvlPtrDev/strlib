@@ -1,5 +1,5 @@
-#include "../../inc/display.h"
-#include "../../inc/memory.h"
+#include "../../internal/display.h"
+#include "../../include/memory.h"
 
 #include <stdlib.h>
 

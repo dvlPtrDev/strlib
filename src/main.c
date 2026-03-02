@@ -1,4 +1,4 @@
-#include "../inc/strlib.h"
+#include "../include/strlib.h"
 #include <stdio.h>
 
 int main(void) {

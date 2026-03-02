@@ -3,12 +3,16 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdarg.h>
 
 /**
- * @brief Referência para strings C tradicionais.
+ * @brief Referência para strings imutáveis (const).
  */
-typedef char *str;
-
+ typedef const char *str;
+ /*
+ * @brief Referência para strings mutáveis.
+ */
+typedef char *mut_str;
 /**
  * @brief Estrutura que representa uma string dinâmica.
  * 
@@ -18,7 +22,7 @@ typedef char *str;
 typedef struct String String;
 
 struct String {
-    str data;                                 /**< Ponteiro para os dados da string */
+    mut_str data; /**< Ponteiro para os dados da string */
     size_t length;                             /**< Número de caracteres na string */
     size_t capacity;                           /**< Capacidade total da string em bytes */
     
@@ -60,7 +64,7 @@ void drop_string(String *string);
  * 
  * @param ref Ponteiro para a referência de string a ser liberada.
  */
-void drop_ref(str *ref);
+void drop_ref(mut_str *ref);
 
 /**
  * @brief Adiciona a string à lista global de strings registradas.
@@ -138,6 +142,53 @@ void string_concat(String *dest, str src);
  * @param src Origem da cópia.
  * @param bytes Quantidade de bytes a copiar. NULL para copiar a string até \0.
  */
-void string_copy(str dest, str src, size_t bytes);
+void string_copy(mut_str dest, str src, size_t bytes);
+/**
+ * @brief Cria uma string formatada similar a printf.
+ *
+ * Recebe uma string de formatação (`msg`) e argumentos variádicos, e retorna uma nova
+ * string alocada dinamicamente contendo o resultado formatado. O buffer alocado
+ * deve ser liberado pelo chamador usando `free` ou função equivalente de sua memória.
+ *
+ * @param msg String de formatação no estilo printf (ex.: "Idade: %d, Nome: %s").
+ * @param ... Argumentos variádicos correspondentes à formatação da string.
+ *
+ * @return str Ponteiro para a string formatada alocada dinamicamente.
+ *
+ * @note Internamente, a função calcula o tamanho necessário usando `get_total_len` e
+ *       chama `vsnprintf` para preencher o buffer.
+ */
+String vformat(str msg, va_list args);
 
-#endif // MY_STRING_H
+/**
+ * @brief Calcula o tamanho total necessário para formatar uma string com argumentos variádicos.
+ *
+ * Recebe uma lista de argumentos variádicos (`va_list`) e uma str de formatação (`s`), e retorna o número total de bytes necessários para armazenar
+ * a string resultante, incluindo o caractere`\0`.
+ *
+ * @param args Lista de argumentos variádicos (tipo `va_list`) a serem usados na formatação.
+ * A lista original não é consumida, mas é usada para criação da cópia
+ * @param s A string de formatação no estilo printf (ex.: "Idade: %d, Nome: %s").
+ *
+ * @return n O número total de bytes necessários para armazenar a string formatada,
+ *         incluindo o caractere nulo.
+ */
+int get_total_len(va_list args, str s);
+/**
+ * @brief Substitui todos os caracteres específicos em uma string.
+ *
+ * Percorre a string `s` e substitui cada ocorrência de `reject` pelo
+ * caractere `replace`. A modificação é feita **in-place** na string
+ * original.
+ *
+ * @param s A string mutável (`mut_str`) que será modificada.
+ * @param reject O caractere que deve ser substituído.
+ * @param replace O caractere que substituirá `reject`.
+ *
+ * @note A string `s` deve estar corretamente alocada e terminada em `\0`.
+ * A função percorre até o terminador nulo e não retorna nada, alterando a string diretamente.
+ *
+ */
+void replace_char(mut_str s, char reject, char replace);
+
+#endif
