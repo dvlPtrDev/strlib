@@ -1,21 +1,21 @@
-# MyString Library
+# Strlib 
 
-Biblioteca em **C** para manipulação de strings dinâmicas, oferece funcionalidades além das tradicionais `string.h`.  
+Biblioteca em **C** para manipulação de strings dinâmicas, oferece funcionalidades além da biblioteca padrão `string.h`.  
 Inclui gerenciamento centralizado de memória com registro de strings e liberação baseada em *memory pool*.  
-Inspirada na forma como **Rust** lida com `String`.
+Inspirada na abordagem **Rust** de manipulação de strings.
 
 ---
 
 ## Funcionalidades
 
-- Criação de strings dinâmicas com capacidade ajustável.  
-- Inicialização e atualização de strings a partir de literais (`str`) ou outras strings.  
+- Criação de strings dinâmicas com capacidade flexível.  
+- Inicialização e atualização de strings a partir de literais (`str`) para strings temporárias na stack e String para strings alocadas na heap.   
 - Comparação de strings (`string_compare`).  
-- Concatenação segura com ajuste automático de capacidade (`string_concat`).  
+- Concatenação com ajuste de capacidade (`string_concat`).  
 - Substituição de caracteres **in-place**.  
-- Registro e rastreamento global de strings (`register_string`, `unregister_string`).  
-- Função `clean_str` que libera todas as strings ao final do programa.  
-- Reajuste automático de capacidade (`recalc_capacity`).  
+- Registro e rastreamento global de String (`register_string`, `unregister_string`).  
+- Função `clean_str` que libera todas as strings ao final do programa. (Ainda procuro uma forma de retirar clean_str da responsabilidade do usuário)  
+- Reajuste de capacidade (`recalc_capacity`).  
 - API modular e extensível, simulando orientação a objetos em C.  
 - Projeto ainda em desenvolvimento, módulos (principalmente para manipulação e performance) continuarão sendo atualizados e criados 
 ---
@@ -26,12 +26,12 @@ Inspirada na forma como **Rust** lida com `String`.
 include/  
   strlib.h        # Header principal da biblioteca  
   memory.h        # Funções auxiliares de alocação  
-  display.h       # Funções de debug/erro  
+  display.h       # Funções de debug/erro
 
 src/  
-  string.c        # Implementação das funções de string  
-  memory.c        # Implementação de alocação  
-  registry.c      # Registro global de strings  
+  strlib.c        # Implementação das funções de criação e manipulação da heap
+  memory.c        # verificação de ponteiros e alocação  
+  registry.c      # Registro global de strings e "garbage collector"  
 ```
 
 ---
@@ -51,6 +51,7 @@ typedef struct String {
     void (*string_from)(String *self, const str s); // Método para inicializar/atualizar  
 } String;  
 ```
+- Os campos capacity, data e o método de inicialização devem ser especificados, sendo length definido pelo próprio programa
 ---
 
 ## Exemplo
@@ -81,39 +82,26 @@ Olá, mundo!
 
 ---
 
-## ⚙️ Compilação
-
-1. clone o repositório `git clone https://github.com/dvlPtrDev/strlib.git`
+## Compilação
+### Linux
+1. clone o repositório `git clone https://github.com/dvlPtrDev/strlib.git && cd strlib`
 ---
-
-## 🧪 Testes
-
-Você pode criar um diretório `tests/` com programas simples para validar cada função:  
-
-- Teste de criação e inicialização (`new_string`, `string_from`)  
-- Teste de concatenação (`string_concat`)  
-- Teste de comparação (`string_compare`)  
-- Teste de limpeza (`drop_string`, `clean_str`)  
-
-Exemplo de teste de comparação:  
-
-String a = new_string(5);  
-a.string_from(&a, "abc");  
-
-String b = new_string(5);  
-b.string_from(&b, "abc");  
-
-printf("Comparação: %s\n", string_compare(a.data, b.data) ? "iguais" : "diferentes");  
-
----
+2. Gere a biblioteca `chmod +x gen_lib.sh && ./gen_lib.sh`
+3. Chame a biblioteca no seu projeto com
+```bash
+  gcc <seu_projeto.c> \
+  -I <path_para_strlib_include> \
+  -L <path_para_strlib_out> \
+  -l:libstr.a
+```
+4. (Opcional) coloque os arquivos no diretório /usr/local/include ou /usr/include para incluir a biblioteca usando #include <strlib.h> `sudo cp include/strlib.h /usr/local/include && sudo cp out/libstr.a /usr/local/lib`, então compile com `gcc <seu_projeto.c> -l:libstr.a
 
 ## 📌 Observações
 
 - Limite atual: até **1024 strings** podem ser registradas simultaneamente.  
 - Este projeto é voltado para aprendizado de **C e gerenciamento de memória**.  
-- Não substitui funções padrão da libc (`strlen`, `strcpy`, etc.), mas mostra como implementá-las manualmente.  
 - Inspirado em conceitos de **Rust** e **orientação a objetos em C**.  
-- Futuras melhorias podem incluir:  
+- Futuras atualizações podem incluir:  
   - Suporte a **Unicode/UTF-8**  
   - Funções de busca e substituição  
   - Integração com testes automatizados (ex.: `CTest` ou `Unity`)  
@@ -127,6 +115,3 @@ Este projeto é distribuído sob a licença MIT.
 Sinta-se livre para usar, modificar e compartilhar.  
 
 ---
-
-✍️ Autor: Pietro (16 anos, estudante)  
-📅 Projeto criado para estudo e prática de programação em C.
