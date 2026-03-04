@@ -26,12 +26,12 @@ Inspirada na abordagem **Rust** de manipulação de strings.
 include/  
   strlib.h        # Header principal da biblioteca  
   memory.h        # Funções auxiliares de alocação  
-  display.h       # Funções de debug/erro
 
 src/  
-  strlib.c        # Implementação das funções de criação e manipulação da heap
-  memory.c        # verificação de ponteiros e alocação  
-  registry.c      # Registro global de strings e "garbage collector"  
+  strlib/strlib.c        # Implementação das funções de criação e manipulação da heap
+  memory/memory.c        # verificação de ponteiros e alocação  
+  strlib/str_track.c      # Registro global de strings e "garbage collector"  
+  strlib/handler/*        # Funções de manipulação de strings, copy, concat...
 ```
 
 ---
