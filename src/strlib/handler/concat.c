@@ -10,7 +10,6 @@ void string_concat(String *dest, str src)
     dest->capacity = recalc_capacity(dest->capacity, total + 1);
     dest->data = allocate(dest->data, dest->capacity);
     
-    
     for (size_t i = 0; i < src_len; i++) {
         dest->data[dest_len + i] = src[i]; 
     }
