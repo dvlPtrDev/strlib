@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 /** 
- * @brief Esse arquivo é um helper usado no debug, a biblioteca strlib não usa e não deve nenhuma função aqui presente
- * @note *EXCETO* a função fatal_print
+ * @brief Helper usado no debug, a biblioteca strlib não usa e não deve nenhuma função aqui presente
+ * @note *EXCETO* a função fatal_print, que deve ser usada para *Matar* o programa
  */
 void fatal_print(str msg, size_t exit_status)
 {
