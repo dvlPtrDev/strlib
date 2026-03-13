@@ -9,7 +9,7 @@ size_t string_length(str string, bool return_terminator)
         i++;
 
     if (return_terminator)
-        return i + 1; // inclui o null terminator
+        i++; // inclui o null terminator
 
     return i;
 }
