@@ -191,4 +191,22 @@ int get_total_len(va_list args, str s);
  */
 void replace_char(mut_str s, char reject, char replace);
 
+/**
+ * @brief Verifica se todos os caracteres de uma string são numéricos.
+ * 
+ * Percorre cada caractere da string fornecida e retorna `true` se todos
+ * forem dígitos ('0' a '9'). Caso encontre qualquer caractere que não seja
+ * um dígito, retorna `false`.
+ * 
+ * @param value Referência para a string a ser verificada.
+ * 
+ * @return true Se todos os caracteres forem numéricos.
+ * @return false Se pelo menos um caractere não for um dígito.
+ * 
+ * @note A função utiliza `string_length(value, false)` para determinar
+ *       o tamanho da string e percorre cada caractere sem depender do
+ *       terminador nulo.
+ */
+bool is_numeric(str value);
+
 #endif
