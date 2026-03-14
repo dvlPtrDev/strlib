@@ -1,7 +1,7 @@
 #include "../internal/display.h"
 
 #include <strlib.h>
-#include <stdlib.h>
+#include <memory.h>
 
 size_t recalc_capacity(size_t capacity, size_t min_capacity)
 {
@@ -22,8 +22,7 @@ void string_from(String *self, str s)
         size_t new_capacity = recalc_capacity(self->capacity, len);
         self->capacity = new_capacity; 
 
-        str new_dataptr = realloc(self->data, self->capacity);
-        if (!new_dataptr) fatal_print("Can't allocate memory!", 0x1000);
+        str new_dataptr = allocate(NULL, self->capacity);
         self->data = (mut_str)new_dataptr; 
     }
 
@@ -38,7 +37,7 @@ String new_string(size_t with_capacity)
     size_t capacity_with_terminator = with_capacity + 1; // reserva espaço para null terminator
 
     String self;
-    self.data = realloc(NULL, capacity_with_terminator);
+    self.data = allocate(NULL, capacity_with_terminator);
     if (!self.data) fatal_print("Can't allocate sufficient bytes for this string!", 0x1100);
     self.data[0] = '\0';
     
@@ -53,8 +52,7 @@ void drop_string(String *string)
 {
     if (string->data)
     {
-        free(string->data);
-        string->data = NULL;
+        deallocate((void**)&string->data);
     }
 
     string->string_from = NULL;
