@@ -1,5 +1,6 @@
+#include "../internal/display.h"
+
 #include <strlib.h>
-#include "../../internal/display.h"
 #include <stdlib.h>
 
 size_t recalc_capacity(size_t capacity, size_t min_capacity)

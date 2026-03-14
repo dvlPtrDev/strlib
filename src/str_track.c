@@ -1,6 +1,7 @@
-#include "../../include/strlib.h"
-#include "../../internal/display.h"
-#include "../../include/memory.h"
+#include "../internal/display.h"
+
+#include <strlib.h>
+#include <memory.h>
 
 #define MAX_STRINGS 1024 
 
