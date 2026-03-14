@@ -14,8 +14,8 @@ void test_string_functions(void) {
     assert(!string_compare(s1.data, s2.data));
     assert(string_compare("Hexxo!!!", s1.data)); // ajusta se necessário
 
-    unregister_string(&s1, true);
-    unregister_string(&s2, true);
+    unregister_string(&s1);
+    unregister_string(&s2);
 }
 
 void test_is_numeric(void) {
@@ -27,8 +27,8 @@ void test_is_numeric(void) {
     assert(is_numeric(sn1.data));
     assert(!is_numeric(sn2.data));
     
-    unregister_string(&sn1, true);
-    unregister_string(&sn2, true);
+    unregister_string(&sn1);
+    unregister_string(&sn2);
 }
 
 int main(void) {

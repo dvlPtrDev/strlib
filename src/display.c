@@ -4,8 +4,8 @@
 #include <stdlib.h>
 
 /** 
- * @brief Helper usado no debug, a biblioteca strlib não usa e não deve nenhuma função aqui presente
- * @note *EXCETO* a função fatal_print, que deve ser usada para *Matar* o programa
+ * @brief Helper usado no debug.
+ * @note A biblioteca usa a função fatal_print para *Matar* o programa em erros **IRRECUPERÁVEIS**
  */
 void fatal_print(str msg, size_t exit_status)
 {
@@ -13,10 +13,6 @@ void fatal_print(str msg, size_t exit_status)
     exit(exit_status);
 }
 
-void error_print(str msg)
-{
-    fprintf(stderr, "\x1b[031m[ERROR] %s", msg);
-}
 
 void debug_print(str msg)
 {

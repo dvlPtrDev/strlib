@@ -72,9 +72,8 @@ void register_string(String *s);
  * @brief Remove a string da lista global de strings registradas.
  * 
  * @param string Ponteiro para a String a ser removida.
- * @param remove_string_too Se verdadeiro, também libera a memória da String.
  */
-void unregister_string(String *string, bool remove_string_too);
+void unregister_string(String *string);
 
 /**
  * @brief Limpa todas as strings registradas.
