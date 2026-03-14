@@ -60,13 +60,6 @@ void string_from(String *self, str s);
 void drop_string(String *string);
 
 /**
- * @brief Libera a memória de uma str se não for NULL.
- * 
- * @param ref Ponteiro para a referência de string a ser liberada.
- */
-void drop_ref(mut_str *ref);
-
-/**
  * @brief Adiciona a string à lista global de strings registradas.
  * 
  * Útil para gerenciamento centralizado de memória e limpeza.

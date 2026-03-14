@@ -1,4 +1,4 @@
-#include "../../../include/strlib.h"
+#include <strlib.h>
 
 void replace_char(mut_str s, char reject, char replace)
 {

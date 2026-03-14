@@ -1,5 +1,5 @@
-#include "../../../include/strlib.h"
-#include "../../../include/memory.h"
+#include <strlib.h>
+#include <memory.h>
 #include <stdarg.h>
 
 String vformat(str msg, va_list args) 

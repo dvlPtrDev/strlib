@@ -1,7 +1,7 @@
-#include "../../include/strlib.h"
-#include "../../include/memory.h"
-
+#include <strlib.h>
+#include <memory.h>
 #include <stdlib.h>
+
 
 size_t recalc_capacity(size_t capacity, size_t min_capacity)
 {
@@ -22,7 +22,7 @@ void string_from(String *self, str s)
         unregister_string(self, false);
     }
 
-    if (isPointerNull(self->data, false) || self->capacity < len)
+    if (!self->data || self->capacity < len)
     {
         self->capacity = recalc_capacity(self->capacity, len);
         self->data = allocate(self->data, self->capacity);
@@ -49,20 +49,10 @@ void drop_string(String *string)
 {
     if (string->data)
     {
-        free(string->data);
-        string->data = NULL;
+        deallocate((void**)&string->data);
     }
 
     string->string_from = NULL;
     string->capacity = 0;
     string->length = 0;
-}
-
-void drop_ref(mut_str *ref)
-{
-    if (isPointerNull(*ref, false))
-        return;
-
-    free(*ref);
-    *ref = NULL;
 }

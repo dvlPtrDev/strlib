@@ -1,4 +1,4 @@
-#include "../../../include/strlib.h"
+#include <strlib.h>
 
 void string_copy(mut_str dest, str src, size_t bytes) 
 {
