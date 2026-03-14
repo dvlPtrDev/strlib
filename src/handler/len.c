@@ -1,4 +1,4 @@
-#include "../../../include/strlib.h"
+#include <strlib.h>
 #include <stdbool.h>
 
 
