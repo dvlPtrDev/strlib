@@ -16,13 +16,6 @@
 void fatal_print(str msg, size_t exit_status);
 
 /**
- * @brief Exibe uma mensagem de erro sem encerrar o programa.
- * 
- * @param msg Mensagem.
- */
-void error_print(str msg);
-
-/**
  * @brief Exibe uma mensagem de debug.
  * 
  * @param msg Mensagem.

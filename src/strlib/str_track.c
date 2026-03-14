@@ -4,38 +4,28 @@
 
 #define MAX_STRINGS 1024 
 
-static String *all_strings[MAX_STRINGS];
+static String *string_pool[MAX_STRINGS];
 static __uint16_t counter = 0;
 
 void register_string(String *s)
 {
-    if (counter < MAX_STRINGS)
-    {
-        all_strings[counter++] = s;
-    }
-    else
-    {
-        fatal_print("This program uses 1024 Strings, fix that code!", 0x1100);
-    }
+    if (counter < MAX_STRINGS) string_pool[counter++] = s;
+    else fatal_print("This program uses more than MAX_STRINGS allows, fix that or change MAX_STRINGS!", 0x1200);
 }
 
-void unregister_string(String *string, bool remove_string_too)
+void unregister_string(String *string)
 {
+
     for (__uint16_t i = 0; i < counter; i++)
     {
-        if (all_strings[i]->data == string->data)
+        if (string_pool[i]->data == string->data)
         {
-            if (remove_string_too) drop_string(string);
-            else drop_ref(&all_strings[i]->data);
-
             // Shift das strings para preencher o espaço
-            for (__uint16_t j = i; j < counter - 1; j++)
+            for (__uint16_t j = i; j + 1 < counter; j++)
             {
-                all_strings[j] = all_strings[j + 1];
-            }
-
-            counter--;
-            all_strings[counter] = NULL;
+                string_pool[j] = string_pool[j + 1];
+            }            
+            string_pool[--counter] = NULL;
             break;
         }
     }
@@ -43,8 +33,5 @@ void unregister_string(String *string, bool remove_string_too)
 
 void clean_str()
 {
-    while (counter > 0)
-    {
-        unregister_string(all_strings[0], true);
-    }
+    while (counter > 0) unregister_string(string_pool[0]);   
 }
