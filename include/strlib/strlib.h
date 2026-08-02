@@ -1,6 +1,7 @@
 #ifndef MY_STRING_H
 #define MY_STRING_H
 
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -19,18 +20,16 @@ typedef char *mut_str;
  * Contém dados alocados dinamicamente, tamanho atual e capacidade.
  * Também possui um ponteiro para o método string_from.
  */
-typedef struct String String;
+
+typedef struct String *String;
 
 struct String {
     mut_str data; /**< Ponteiro para os dados da string */
     size_t length;                             /**< Número de caracteres na string */
     size_t capacity;                           /**< Capacidade total da string em bytes */
     
-    /**
-     * @brief Método que inicializa ou atualiza a string a partir de um str.
-     */
-    void (*string_from)(String *self, const str s);
 };
+
 
 /* ===========================================
  * Protótipos de funções
@@ -50,30 +49,14 @@ String new_string(size_t with_capacity);
  * @param self Ponteiro para a String que será preenchida.
  * @param s Referência para a string de origem.
  */
-void string_from(String *self, str s);
+void string_from(String self, str s);
 
 /**
  * @brief Libera a memória alocada para uma String.
  * 
  * @param string Ponteiro para a String a ser liberada.
  */
-void drop_string(String *string);
-
-/**
- * @brief Adiciona a string à lista global de strings registradas.
- * 
- * Útil para gerenciamento centralizado de memória e limpeza.
- * 
- * @param s Ponteiro para a String a ser registrada.
- */
-void register_string(String *s);
-
-/**
- * @brief Remove a string da lista global de strings registradas.
- * 
- * @param string Ponteiro para a String a ser removida.
- */
-void unregister_string(String *string);
+void drop_string(String string);
 
 /**
  * @brief Limpa todas as strings registradas.
@@ -83,22 +66,13 @@ void unregister_string(String *string);
 void clean_str();
 
 /**
- * @brief Recalcula a capacidade de uma string para garantir espaço suficiente.
- * 
- * @param capacity Capacidade atual.
- * @param min_capacity Capacidade mínima necessária.
- * @return size_t Nova capacidade ajustada.
- */
-size_t recalc_capacity(size_t capacity, size_t min_capacity);
-
-/**
  * @brief Calcula o tamanho de uma string.
  * 
  * @param string Referência para a string.
  * @param return_terminator Se verdadeiro, inclui o null terminator no tamanho.
  * @return size_t Tamanho da string (com ou sem terminador).
  */
-size_t string_length(str string, bool return_terminator);
+size_t str_len(str string, bool return_terminator);
 
 /**
  * @brief Compara duas strings para verificar se são iguais.
@@ -112,7 +86,7 @@ size_t string_length(str string, bool return_terminator);
  * @return true Se as strings forem iguais.
  * @return false Caso contrário.
  */
-bool string_compare(str s1, str s2);
+bool compare_str(str s1, str s2);
 
 /**
  * @brief Concatena uma str ao final de uma String dinâmica.
@@ -120,9 +94,9 @@ bool string_compare(str s1, str s2);
  * Ajusta a capacidade da String se necessário.
  * 
  * @param dest Ponteiro para a String de destino.
- * @param src str a ser concatenada.
+ * @param src str a ser concat_strenada.
  */
-void string_concat(String *dest, str src);
+void concat_str(String dest, str src);
 
 /**
  * @brief Copia um número de bytes str para outra.
@@ -134,7 +108,7 @@ void string_concat(String *dest, str src);
  * @param src Origem da cópia.
  * @param bytes Quantidade de bytes a copiar. NULL para copiar a string até \0.
  */
-void string_copy(mut_str dest, str src, size_t bytes);
+void copy_str(mut_str dest, str src, size_t bytes);
 /**
  * @brief Cria uma string formatada similar a printf.
  *
@@ -170,18 +144,18 @@ int get_total_len(va_list args, str s);
  * @brief Substitui todos os caracteres específicos em uma string.
  *
  * Percorre a string `s` e substitui cada ocorrência de `reject` pelo
- * caractere `replace`. A modificação é feita **in-place** na string
+ * caractere `replace_str`. A modificação é feita **in-place** na string
  * original.
  *
  * @param s A string mutável (`mut_str`) que será modificada.
  * @param reject O caractere que deve ser substituído.
- * @param replace O caractere que substituirá `reject`.
+ * @param replace_str O caractere que substituirá `reject`.
  *
  * @note A string `s` deve estar corretamente alocada e terminada em `\0`.
  * A função percorre até o terminador nulo e não retorna nada, alterando a string diretamente.
  *
  */
-void replace_char(mut_str s, char reject, char replace);
+void replace_str(mut_str s, char reject, char replace_str);
 
 /**
  * @brief Verifica se todos os caracteres de uma string são numéricos.
@@ -195,10 +169,36 @@ void replace_char(mut_str s, char reject, char replace);
  * @return true Se todos os caracteres forem numéricos.
  * @return false Se pelo menos um caractere não for um dígito.
  * 
- * @note A função utiliza `string_length(value, false)` para determinar
+ * @note A função utiliza `str_len(value, false)` para determinar
  *       o tamanho da string e percorre cada caractere sem depender do
  *       terminador nulo.
  */
 bool is_numeric(str value);
+
+/**
+ * @brief Lê uma string a partir da stdin.
+ *
+ * Cria uma nova String e adiciona os caracteres lidos até encontrar
+ * uma quebra de linha ou o fim da entrada.
+ *
+ * @return String Nova string contendo os caracteres recebidos.
+ *
+ * @note A memória retornada deve ser liberada pelo usuário quando não
+ * for mais necessária.
+ */
+String read_line_str(void);
+
+/**
+ * @brief Adiciona um caractere ao final de uma String.
+ *
+ * Insere o caractere informado após o último caractere existente,
+ * garantindo que a String possua capacidade suficiente e mantendo o
+ * terminador nulo no final do buffer.
+ *
+ * @param self String que receberá o caractere.
+ * @param c Caractere que será adicionado.
+ */
+void push_str(String self, char c);
+void trim_str(mut_str s);
 
 #endif

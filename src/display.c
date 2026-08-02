@@ -1,4 +1,4 @@
-#include "../internal/display.h"
+#include "internal/display.h"
 
 #include <stdio.h>
 #include <stdlib.h>

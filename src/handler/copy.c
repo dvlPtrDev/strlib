@@ -1,9 +1,9 @@
-#include <strlib.h>
+#include "include/strlib/strlib.h"
 
-void string_copy(mut_str dest, str src, size_t bytes) 
+void copy_str(mut_str dest, str src, size_t bytes) 
 {
 
-    if (!bytes) bytes = string_length(src, true);
+    if (!bytes) bytes = str_len(src, true);
     const char *srcp = src;
     
     for (char *destp = dest; bytes--; srcp++, destp++) *destp = *srcp;

@@ -10,8 +10,8 @@ Inspirada na abordagem **Rust** de manipulação de strings.
 
 - Criação de strings dinâmicas com capacidade flexível.  
 - Inicialização e atualização de strings a partir de literais (`str`) para strings temporárias na stack e String para strings alocadas na heap.   
-- Comparação de strings (`string_compare`).  
-- Concatenação com ajuste de capacidade (`string_concat`).  
+- Comparação de strings (`compare_str`).  
+- Concatenação com ajuste de capacidade (`concat_str`).  
 - Substituição de caracteres **in-place**.  
 - Registro e rastreamento global de String (`register_string`, `unregister_string`).  
 - Função `clean_str` que libera todas as strings ao final do programa. (Ainda procuro uma forma de retirar clean_str da responsabilidade do usuário)  
@@ -31,7 +31,7 @@ src/
   strlib/strlib.c        # Implementação das funções de criação e manipulação da heap
   memory/memory.c        # verificação de ponteiros e alocação  
   strlib/str_track.c      # Registro global de strings e "garbage collector"  
-  strlib/handler/*        # Funções de manipulação de strings, copy, concat...
+  strlib/handler/*        # Funções de manipulação de strings, copy, concat_str...
 ```
 
 ---
@@ -48,7 +48,6 @@ typedef struct String {
     mut_str data;            // Ponteiro para os dados  
     size_t length;           // Número de caracteres atuais  
     size_t capacity;         // Capacidade alocada  
-    void (*string_from)(String *self, const str s); // Método para inicializar/atualizar  
 } String;  
 ```
 - Os campos capacity, data e o método de inicialização devem ser especificados, sendo length definido pelo próprio programa
@@ -67,7 +66,7 @@ int main() {
     s.string_from(&s, "Olá");  
 
     // Concatena outra string  
-    string_concat(&s, ", mundo!");  
+    concat_str(&s, ", mundo!");  
 
     // Exibe resultado  
     printf("%s\n", s.data);  

@@ -1,8 +1,9 @@
-#include <strlib.h>
+#include "include/strlib/strlib.h"
+
 #include <stdbool.h>
 
 
-size_t string_length(str string, bool return_terminator)
+size_t str_len(str string, bool return_terminator)
 {
     size_t i = 0;
     while (string[i] != '\0')
