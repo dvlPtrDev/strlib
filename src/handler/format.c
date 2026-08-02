@@ -1,5 +1,6 @@
-#include <strlib.h>
-#include <memory.h>
+#include "include/strlib/strlib.h"
+#include "internal/memory.h"
+
 #include <stdarg.h>
 
 String vformat(str msg, va_list args) 
@@ -7,10 +8,10 @@ String vformat(str msg, va_list args)
     int needed = get_total_len(args, msg);
     String s = new_string(needed);
 
-    vsnprintf(s.data, needed, msg, args);
+    vsnprintf(s->data, needed, msg, args);
         
-    s.length = needed - 1;
-    register_string(&s);
+    s->length = needed - 1;
+    register_string(s);
     return s;
 }
 

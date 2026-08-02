@@ -1,51 +1,27 @@
-CC := gcc
-CFLAGS := -Iinclude
-LDFLAGS := -L./out -l:libstr.a -lsqlite3
+COMPILER = gcc
+CFLAGS = -Wall -g -I.
 
-# Fontes do projeto principal
-SRC := main.c $(wildcard ./src/*.c) $(wildcard ./src/handler/*.c)
-OBJ := $(patsubst %.c, ./out/%.o, $(SRC))
+# 1. Busca todos os .c (ignora a pasta out)
+SRCS = $(shell find . -name "*.c" -not -path "./out/*")
 
-# Fontes da biblioteca
-LIB_SRC := $(wildcard ./strlib/src/*.c) $(wildcard ./strlib/src/handler/*.c)
-LIB_OBJ := $(patsubst ./strlib/src/%.c, ./out/obj/%.o, $(LIB_SRC))
-LIB := ./out/libstr.a
+# 2. Força todos os arquivos .o a terem "out/" no começo do caminho
+OBJS = $(patsubst %.c, out/%.o, $(SRCS))
 
-TARGET := ./out/main
+all: app
 
-# Regra principal
-all: $(LIB) $(TARGET)
+# O executável final fica na raiz
+app: $(OBJS)
+	$(COMPILER) $(CFLAGS) $(OBJS) -o app
 
-# Compilar biblioteca
-$(LIB): $(LIB_OBJ)
-	ar rcs $@ $^
-
-# Compilar objetos da biblioteca
-./out/obj/%.o: ./strlib/src/%.c | ./out/obj
+# Regra que cria as subpastas dentro de out/ e compila os objetos lá dentro
+out/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(COMPILER) $(CFLAGS) -c $< -o $@
 
-# Compilar objetos do projeto principal
-./out/%.o: %.c | ./out
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Linkar executável
-$(TARGET): $(OBJ) $(LIB)
-	$(CC) $(OBJ) -o $@ $(LDFLAGS)
-
-# Criação de diretórios
-./out:
-	mkdir -p ./out
-
-./out/obj:
-	mkdir -p ./out/obj
-
-# Rodar
+# Executa o programa a partir da raiz
 run: all
-	@echo "=== Rodando $(TARGET) ==="
-	@$(TARGET)
+	./app
 
-# Limpeza
+.PHONY: clean run
 clean:
-	rm -rf ./out/*.o ./out/*/*.o ./out/*/*/*.o ./out/main ./out/libstr.a ./out/obj
+	rm -rf out app
